@@ -143,14 +143,14 @@ for( my $i = 0; $i < $number_of_requests; $i++ ) {
     my $random_status = $statuses->[int(rand(scalar @$statuses))];
 
     my $random_branchcode = $branchcodes[int(rand(scalar @branchcodes))];
-    my $random_borrower = $borrowers[int(rand(scalar @borrowers))];
-    my $random_biblio = $biblios[int(rand(scalar @biblios))];
+    my $random_borrowernumber = $borrowers[int(rand(scalar @borrowers))];
+    my $random_biblionumber = $biblios[int(rand(scalar @biblios))];
 
     # Create fake data
     my $request_id = Koha::Illrequest->new(
         {
-            borrowernumber => $random_borrower,
-            rand >= 0.5 ? (biblio_id => $random_biblio):(),
+            borrowernumber => $random_borrowernumber,
+            rand >= 0.5 ? (biblio_id => $random_biblionumber):(),
             # due_date =>
             branchcode => $random_branchcode,
             status => $random_status,
@@ -170,7 +170,7 @@ for( my $i = 0; $i < $number_of_requests; $i++ ) {
         }
     )->store();
 
-    # Create related data
+    # Create related illrequestattributes
     my @illrequestattributes = illrequestattributes;
     foreach my $attribute ( @illrequestattributes ) {
         my $random_type;
