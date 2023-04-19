@@ -29,6 +29,7 @@ use C4::Context;
 use Koha::Illrequest;
 use Koha::Illrequests;
 use Koha::Illrequestattributes;
+use Koha::Illcomment;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Biblios;
@@ -39,17 +40,20 @@ my $fake_text = Text::Lorem->new();
 
 # Command line option values
 my $reset_data = 0;
-my $number_of_records = 10;
+my $number_of_requests = 10;
+my $number_of_comments = 10;
 
 my $options = GetOptions(
     # 'h|help'          => \$get_help,
     'reset-data'        => \$reset_data,
-    'records=s'         => \$number_of_records,
+    'requests=s'        => \$number_of_requests,
+    'comments=s'        => \$number_of_comments,
 );
 
 =Arguments
 reset_data - erase current data before creating new fake data
-number_of_records - number of fake records to create
+number_of_requests - number of fake requests to create
+number_of_comments - number of fake comments to create
 TODO: Get these from the command line
 =cut
 
@@ -121,7 +125,7 @@ sub illrequestattributes {
 =Fake data creation
 Get some data from the database
 Prepare some random data (random branchcode, random biblio, random borrower)
-Create $number_of_records records
+Create $number_of_requests requests
 
 =cut
 
@@ -129,7 +133,7 @@ my @branchcodes = Koha::Libraries->search({branchcode => { '!=', undef }})->get_
 my @borrowers = Koha::Patrons->search({borrowernumber => { '!=', undef }})->get_column('borrowernumber');
 my @biblios = Koha::Biblios->search({biblionumber => { '!=', undef }})->get_column('biblionumber');
 
-for( my $i = 0; $i < $number_of_records; $i++ ) {
+for( my $i = 0; $i < $number_of_requests; $i++ ) {
 
     # Prepare some random data
     my $random_backend = $backends[rand @backends];
@@ -192,4 +196,22 @@ for( my $i = 0; $i < $number_of_records; $i++ ) {
             )->store();
         }
 	}
+}
+
+# # Create related illcomments
+my @requests = Koha::Illrequests->search({illrequest_id => { '!=', undef }})->get_column('illrequest_id');
+for( my $i = 0; $i < $number_of_comments; $i++ ) {
+    my $random_ill_request_id = $requests[int(rand(scalar @requests))];
+    my $random_borrowernumber = $borrowers[int(rand(scalar @borrowers))];
+
+    if ( rand >= 0.5 ) {
+        Koha::Illcomment->new(
+        {
+            illrequest_id => $random_ill_request_id,
+            borrowernumber => $random_borrowernumber,
+            comment => $fake_text->paragraphs(1),
+            timestamp => $faker->sqldate
+        }
+        )->store();
+    }
 }
