@@ -1,9 +1,18 @@
-# koha-fake-data
-Tool to create fake data in [Koha](https://koha-community.org/).
+# koha-ill-dev
+Tools to help [Koha](https://koha-community.org/) ILL development using [koha-testing-docker](https://gitlab.com/koha-community/koha-testing-docker)
 
-Currently requires pre-existing libraries, patrons and biblio records. Use in [koha-testing-docker](https://gitlab.com/koha-community/koha-testing-docker)
+## Start ILL in k-t-d
+Copy start-ill-dev.sh inside the docker container
+Run the script inside k-t-d
+`sh start-ill-dev.sh`
 
-Currently only creates fake data for ILL requests.
+The script will:
+* Install the [FreeForm](https://github.com/PTFS-Europe/koha-ill-freeform) backend if that doesn't exist. 
+* Update backend_directory config in koha-conf.xml
+* Enable the ILLModule system preference
+
+# Creating fake data
+Currently requires pre-existing libraries, patrons and biblio records, these should all exist out of the box using [k-t-d](https://gitlab.com/koha-community/koha-testing-docker)
 
 ## Dependencies
 * Data::Faker
