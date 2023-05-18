@@ -20,15 +20,14 @@ Currently requires pre-existing libraries, patrons and biblio records, these sho
 * Data::Faker
 * Text::Lorem
 
-## ill_data.pl options
+## fake_data.pl options
 * **reset_data** - erase current data before creating new fake data (recommended)
-* **requests** - number of fake ILL requests to create
-* **comments** - number of fake ILL comments to create (these are get related to the fake requests randomly)
+* **how-many** - number of fake entity instances to create
 
 ## Usage (_dev only_)
 
 Generate 100 fake ILL requests and 100 fake comments:
 
 ```sh
-perl ill_data.pl --requests 100 --comments 100 --reset-data
+perl fake_data.pl --how-many 100 --reset-data
 ```
