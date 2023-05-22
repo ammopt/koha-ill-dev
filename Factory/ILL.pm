@@ -92,6 +92,10 @@ sub create {
     # Create ILL requests
     for ( my $i = 0 ; $i < $this_many ; $i++ ) {
 
+        # Progress indication
+        my $percent = $i * 100 / $this_many;
+        system 'printf "#####  '.$i.'/'.$this_many.' ('.$percent.'%%)\r"';
+
         # Prepare some random data
         my $random_backend      = $backends[ rand @backends ];
         my $random_backend_name = $random_backend->{name};
