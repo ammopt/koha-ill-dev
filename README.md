@@ -29,5 +29,5 @@ Currently requires pre-existing libraries, patrons and biblio records, these sho
 Generate 100 fake ILL requests and 100 fake comments:
 
 ```sh
-perl fake_data.pl --how-many 100 --reset-data
+PERL5LIB=$PERL5LIB:lib perl fake_data.pl --how-many 100 --reset-data
 ```

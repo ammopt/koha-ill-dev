@@ -1,4 +1,4 @@
-package Koha::Factory::ILL;
+package KohaFactory::ILL;
 
 # This file is part of Koha.
 #
@@ -36,7 +36,7 @@ use Koha::Biblios;
 
 =head1 NAME
 
-Koha::Factory::ILL
+KohaFactory::ILL
 
 =head1 API
 

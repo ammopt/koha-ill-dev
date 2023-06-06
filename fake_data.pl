@@ -21,8 +21,8 @@ use Modern::Perl;
 
 use Getopt::Long qw( GetOptions );
 
-use Koha::Factory::ILL;
-use Koha::Factory::ERM;
+use KohaFactory::ILL;
+use KohaFactory::ERM;
 
 my $sth = C4::Context->dbh;
 our $faker = Data::Faker->new();
@@ -44,6 +44,6 @@ reset_data - erase current data before creating new fake data
 how_many - number of fake entity instances to create
 =cut
 
-Koha::Factory::ILL->new->create( $how_many, $reset_data );
-Koha::Factory::ERM->new->create( $how_many, $reset_data );
+KohaFactory::ILL->new->create( $how_many, $reset_data );
+KohaFactory::ERM->new->create( $how_many, $reset_data );
 

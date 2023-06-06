@@ -1,4 +1,4 @@
-package Koha::Factory::ERM;
+package KohaFactory::ERM;
 
 # This file is part of Koha.
 #
@@ -32,7 +32,7 @@ use Koha::Acquisition::Booksellers;
 
 =head1 NAME
 
-Koha::Factory::ERM
+KohaFactory::ERM
 
 =head1 API
 
