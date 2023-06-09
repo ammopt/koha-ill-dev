@@ -2,14 +2,22 @@
 Tools to help [Koha](https://koha-community.org/) ILL development using [koha-testing-docker](https://gitlab.com/koha-community/koha-testing-docker)
 
 ## Start ILL in k-t-d
-Copy **start-ill-dev.sh** inside the docker container and run.
+Inside the docker container, run.
+
+#### [FreeForm](https://github.com/PTFS-Europe/koha-ill-freeform) only
 
 ```sh
-sh start-ill-dev.sh
+bash <(curl -s https://raw.githubusercontent.com/ammopt/koha-ill-dev/master/start-ill-dev.sh)
+```
+
+#### [FreeForm](https://github.com/PTFS-Europe/koha-ill-freeform) + [BLDSS](https://github.com/PTFS-Europe/koha-ill-bldss)
+
+```sh
+bash <(curl -s https://raw.githubusercontent.com/ammopt/koha-ill-dev/master/start-ill-dev-plus.sh)
 ```
 
 This will:
-* Install the [FreeForm](https://github.com/PTFS-Europe/koha-ill-freeform) backend if that doesn't exist. 
+* Install the backend(s) if that doesn't exist. 
 * Update backend_directory config in koha-conf.xml
 * Enable the ILLModule system preference
 
