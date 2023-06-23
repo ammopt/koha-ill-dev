@@ -10,7 +10,7 @@ Inside the docker container, run.
 bash <(curl -s https://raw.githubusercontent.com/ammopt/koha-ill-dev/master/start-ill-dev.sh)
 ```
 
-#### [FreeForm](https://github.com/PTFS-Europe/koha-ill-freeform) + [BLDSS](https://github.com/PTFS-Europe/koha-ill-bldss)
+#### [FreeForm](https://github.com/PTFS-Europe/koha-ill-freeform) + [BLDSS](https://github.com/PTFS-Europe/koha-ill-bldss) + [ReprintsDesk](https://github.com/PTFS-Europe/koha-ill-reprintsdesk)
 
 ```sh
 bash <(curl -s https://raw.githubusercontent.com/ammopt/koha-ill-dev/master/start-ill-dev-plus.sh)
