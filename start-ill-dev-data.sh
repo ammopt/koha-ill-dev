@@ -25,15 +25,6 @@ else
     sudo cpanm Locale::Country
 fi
 
-RPDDIR=/kohadevbox/koha/Koha/Illbackends/ReprintsDesk
-if [ -d "$RPDDIR" ];
-then
-    echo "$RPDDIR directory already exists. Skipping installation of ReprintsDesk backend"
-else
-    echo "Installing $RPDDIR"
-    git clone https://github.com/PTFS-Europe/koha-ill-reprintsdesk $RPDDIR
-fi
-
 echo "Updating backend_directory in koha-conf.xml"
 sed -i 's/<backend_directory>\/usr\/share\/koha\/lib\/Koha\/Illbackends<\/backend_directory>/<backend_directory>\/kohadevbox\/koha\/Koha\/Illbackends<\/backend_directory> /g' /etc/koha/sites/kohadev/koha-conf.xml
 
@@ -48,7 +39,7 @@ sudo cpan Data:Faker
 sudo cpan Text:Lorem
 
 echo "Generating 10k ILL requests. This may take a couple minutes"
-PERL5LIB=$PERL5LIB:lib perl fake_data.pl --how-many 10000 --reset-data
+cd /kohadevbox/koha/koha-ill-dev && PERL5LIB=$PERL5LIB:lib perl fake_data.pl --how-many 10000 --reset-data
 
 koha-plack --restart kohadev
 flush_memcached
