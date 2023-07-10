@@ -45,5 +45,5 @@ how_many - number of fake entity instances to create
 =cut
 
 KohaFactory::ILL->new->create( $how_many, $reset_data );
-KohaFactory::ERM->new->create( $how_many, $reset_data );
+# KohaFactory::ERM->new->create( $how_many, $reset_data );
 
