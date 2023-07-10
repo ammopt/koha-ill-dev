@@ -38,6 +38,9 @@ echo "Installing fake data dependencies"
 sudo cpan Data:Faker
 sudo cpan Text:Lorem
 
+koha-plack --restart kohadev
+flush_memcached
+
 echo "Generating 10k ILL requests. This may take a couple minutes"
 cd /kohadevbox/koha/koha-ill-dev && PERL5LIB=$PERL5LIB:lib perl fake_data.pl --how-many 10000 --reset-data
 
