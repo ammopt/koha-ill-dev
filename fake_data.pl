@@ -23,6 +23,7 @@ use Getopt::Long qw( GetOptions );
 
 use KohaFactory::ILL;
 use KohaFactory::ERM;
+use KohaFactory::Circulation;
 
 my $sth = C4::Context->dbh;
 our $faker = Data::Faker->new();
