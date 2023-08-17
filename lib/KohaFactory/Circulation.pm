@@ -17,7 +17,6 @@ package KohaFactory::Circulation;
 
 use Modern::Perl;
 
-use Data::Faker qw(Company DateTime Internet Name PhoneNumber StreetAddress);
 use Text::Lorem;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -71,7 +70,6 @@ sub create {
     }
 
     my $sth   = C4::Context->dbh;
-    my $faker = Data::Faker->new();
 
     my @items = Koha::Items->search( { itemnumber => { '!=', undef } } )
       ->get_column('itemnumber');
