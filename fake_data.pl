@@ -23,6 +23,7 @@ use Getopt::Long qw( GetOptions );
 
 use KohaFactory::ILL;
 use KohaFactory::ERM;
+use KohaFactory::PatronAttributes;
 use KohaFactory::Circulation;
 
 my $sth = C4::Context->dbh;
@@ -30,12 +31,13 @@ our $faker = Data::Faker->new();
 my $fake_text = Text::Lorem->new();
 
 # Command line option values
-my $reset_data         = 0;
-my $how_many = 10;
+my $reset_data = 0;
+my $how_many   = 10;
+my $entity;
 
 my $options = GetOptions(
 
-    # 'h|help'          => \$get_help,
+    'e|entity=s'   => \$entity,
     'reset-data' => \$reset_data,
     'how-many=s' => \$how_many,
 );
@@ -45,6 +47,19 @@ reset_data - erase current data before creating new fake data
 how_many - number of fake entity instances to create
 =cut
 
-KohaFactory::ILL->new->create( $how_many, $reset_data );
-# KohaFactory::ERM->new->create( $how_many, $reset_data );
+unless ($entity) {
+    say "You must specify an entity to create fake data for";
+    exit;
+}
+
+if ( $entity eq 'ill' ) {
+    KohaFactory::ILL->new->create( $how_many, $reset_data );
+} elsif ( $entity eq 'erm' ) {
+    KohaFactory::ERM->new->create( $how_many, $reset_data );
+} elsif ( $entity eq 'pattributes' ) {
+    KohaFactory::PatronAttributes->new->create( $how_many, $reset_data );
+}else{
+    say "Entity $entity is not supported.";
+    exit;
+}
 
