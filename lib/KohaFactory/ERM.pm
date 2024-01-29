@@ -72,23 +72,23 @@ sub create {
     my $faker     = Data::Faker->new();
     my $fake_text = Text::Lorem->new();
 
-    my @vendors =
-        Koha::Acquisition::Booksellers->search( { id => { '!=', undef } } )
-      ->get_column('id');
+    my @vendors = Koha::Acquisition::Booksellers->search( { id => { '!=', undef } } )->get_column('id');
 
     # Create agreements
     for ( my $i = 0 ; $i < $this_many ; $i++ ) {
 
         # Prepare some random data
         my $random_vendor =
-        $vendors[ int( rand( scalar @vendors ) ) ];
+            $vendors[ int( rand( scalar @vendors ) ) ];
 
         my $args = {
             vendor_id => $random_vendor,
-            name => $faker->name,
+            name      => $faker->name,
+
             #TODO: Have a random number of sentences?
             description => $fake_text->sentences(1),
-# TODO: Get values from ERM_AGREEMENT_STATUS AV
+
+            # TODO: Get values from ERM_AGREEMENT_STATUS AV
             status => 'active'
         };
 

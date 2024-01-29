@@ -78,14 +78,9 @@ sub create {
     my $faker     = Data::Faker->new();
     my $fake_text = Text::Lorem->new();
 
-    my @branchcodes =
-      Koha::Libraries->search( { branchcode => { '!=', undef } } )
-      ->get_column('branchcode');
-    my @borrowers =
-      Koha::Patrons->search( { borrowernumber => { '!=', undef } } )
-      ->get_column('borrowernumber');
-    my @biblios = Koha::Biblios->search( { biblionumber => { '!=', undef } } )
-      ->get_column('biblionumber');
+    my @branchcodes = Koha::Libraries->search( { branchcode => { '!=', undef } } )->get_column('branchcode');
+    my @borrowers   = Koha::Patrons->search( { borrowernumber => { '!=', undef } } )->get_column('borrowernumber');
+    my @biblios     = Koha::Biblios->search( { biblionumber   => { '!=', undef } } )->get_column('biblionumber');
 
     my @backends = $self->backends;
 
@@ -94,7 +89,7 @@ sub create {
 
         # Progress indication
         my $percent = $i * 100 / $this_many;
-        system 'printf "#####  '.$i.'/'.$this_many.' ('.$percent.'%%)\r"';
+        system 'printf "#####  ' . $i . '/' . $this_many . ' (' . $percent . '%%)\r"';
 
         # Prepare some random data
         my $random_backend      = $backends[ rand @backends ];
@@ -104,9 +99,9 @@ sub create {
         my $random_status = $statuses->[ int( rand( scalar @$statuses ) ) ];
 
         my $random_branchcode =
-          $branchcodes[ int( rand( scalar @branchcodes ) ) ];
+            $branchcodes[ int( rand( scalar @branchcodes ) ) ];
         my $random_borrowernumber =
-          $borrowers[ int( rand( scalar @borrowers ) ) ];
+            $borrowers[ int( rand( scalar @borrowers ) ) ];
         my $random_biblionumber = $biblios[ int( rand( scalar @biblios ) ) ];
 
         my $args = {
@@ -138,19 +133,19 @@ sub create {
 
         ## TODO: IF BACKEND ALLOWS FOR CREATE_API, USE THAT TO CREATE REQUEST INSTEAD
 
- # my $request_load = Koha::Illrequest->new->load_backend($random_backend_name);
- # my $create_api = $request_load->_backend->capabilities('create_api');
+        # my $request_load = Koha::Illrequest->new->load_backend($random_backend_name);
+        # my $create_api = $request_load->_backend->capabilities('create_api');
 
-# my $new_id = undef;
-# if ( !$create_api ) {
-#     warn $random_backend_name.' does not allow for request creation through REST API';
-#     warn 'using standard method';
-#     my $new_obj = Koha::Illrequest->new($args)->store();
-#     $new_id = $new_obj->illrequest_id;
-# }else {
-#     my $create_result = &{$create_api}( $args, $request_load );
-#     $new_id        = $create_result->illrequest_id;
-# }
+        # my $new_id = undef;
+        # if ( !$create_api ) {
+        #     warn $random_backend_name.' does not allow for request creation through REST API';
+        #     warn 'using standard method';
+        #     my $new_obj = Koha::Illrequest->new($args)->store();
+        #     $new_id = $new_obj->illrequest_id;
+        # }else {
+        #     my $create_result = &{$create_api}( $args, $request_load );
+        #     $new_id        = $create_result->illrequest_id;
+        # }
 
         # Create fake ILL request
         my $new_obj = Koha::Illrequest->new($args)->store();
@@ -181,14 +176,12 @@ sub create {
     }
 
     # Create related illcomments
-    my @requests =
-      Koha::Illrequests->search( { illrequest_id => { '!=', undef } } )
-      ->get_column('illrequest_id');
+    my @requests = Koha::Illrequests->search( { illrequest_id => { '!=', undef } } )->get_column('illrequest_id');
     for ( my $i = 0 ; $i < $this_many ; $i++ ) {
         my $random_ill_request_id =
-          $requests[ int( rand( scalar @requests ) ) ];
+            $requests[ int( rand( scalar @requests ) ) ];
         my $random_borrowernumber =
-          $borrowers[ int( rand( scalar @borrowers ) ) ];
+            $borrowers[ int( rand( scalar @borrowers ) ) ];
 
         if ( rand >= 0.5 ) {
             Koha::Illcomment->new(
@@ -215,8 +208,7 @@ sub illrequestattributes {
     return (
         {
             type  => "type",
-            value =>
-              [ "article", "journal", "book", "thesis", "conference", "other" ]
+            value => [ "article", "journal", "book", "thesis", "conference", "other" ]
         },
         {
             type  => "author",
