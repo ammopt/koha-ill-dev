@@ -170,6 +170,7 @@ sub create {
                     {
                         illrequest_id => $new_id,
                         type          => $attribute->{type},
+                        backend       => $random_backend_name,
                         $attribute->{type} eq "type"
                         ? ( value => $random_type )
                         : ( value => $attribute->{value} )
