@@ -29,11 +29,11 @@ use Try::Tiny qw( catch try );
 
 use C4::Context;
 
-use Koha::Illrequest;
-use Koha::Illrequests;
-use Koha::Illrequestattributes;
-use Koha::Illcomment;
-use Koha::Illcomments;
+use Koha::ILL::Request;
+use Koha::ILL::Requests;
+use Koha::ILL::Request::Attribute;
+use Koha::ILL::Comment;
+use Koha::ILL::Comments;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron;
@@ -96,22 +96,25 @@ sub create {
     # Create patron attributes
     for ( my $i = 0 ; $i < $this_many ; $i++ ) {
 
-            my $dbh = C4::Context->dbh;
-            try{
-                my $query =
-                    q|INSERT INTO borrowers ( cardnumber, userid, password, surname, categorycode, branchcode, dateexpiry, flags ) VALUES ( ?, ?, ?, 'surname patron', ?, ?, '2099-12-31', 0 )|;
-                my $res = $dbh->prepare($query) or die("cannot prepeare");
-                $res->execute( 'cardnu' . $rand.$i, 'usaaaa' .$rand. $i, 'password', $random_categorycode, $random_branchcode );
-            };
+        my $dbh = C4::Context->dbh;
+        try {
+            my $query =
+                q|INSERT INTO borrowers ( cardnumber, userid, password, surname, categorycode, branchcode, dateexpiry, flags ) VALUES ( ?, ?, ?, 'surname patron', ?, ?, '2099-12-31', 0 )|;
+            my $res = $dbh->prepare($query) or die("cannot prepeare");
+            $res->execute(
+                'cardnu' . $rand . $i, 'usaaaa' . $rand . $i, 'password', $random_categorycode,
+                $random_branchcode
+            );
+        };
 
-            # Below is trash performance wise
-            # Koha::Patron->new(
-            #     {
-            #         cardnumber   => "$rand$i",
-            #         branchcode   => $random_branchcode,
-            #         categorycode => $random_categorycode,
-            #     }
-            # )->store;
+        # Below is trash performance wise
+        # Koha::Patron->new(
+        #     {
+        #         cardnumber   => "$rand$i",
+        #         branchcode   => $random_branchcode,
+        #         categorycode => $random_categorycode,
+        #     }
+        # )->store;
         system 'printf "Adding patrons #####  ' . $i . '/' . $this_many . ' (' . $i * 100 / $this_many . '%%)\r"';
 
     }

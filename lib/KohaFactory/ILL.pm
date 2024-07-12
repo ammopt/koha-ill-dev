@@ -25,11 +25,11 @@ use C4::Context;
 
 use base qw(Koha::Object);
 
-use Koha::Illrequest;
-use Koha::Illrequests;
-use Koha::Illrequestattributes;
-use Koha::Illcomment;
-use Koha::Illcomments;
+use Koha::ILL::Request;
+use Koha::ILL::Requests;
+use Koha::ILL::Request::Attributes;
+use Koha::ILL::Comment;
+use Koha::ILL::Comments;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Biblios;
@@ -69,9 +69,9 @@ sub create {
     my ( $self, $this_many, $reset_data ) = @_;
 
     if ($reset_data) {
-        Koha::Illrequests->search()->delete;
-        Koha::Illrequestattributes->search()->delete;
-        Koha::Illcomments->search()->delete;
+        Koha::ILL::Requests->search()->delete;
+        Koha::ILL::Request::Attributes->search()->delete;
+        Koha::ILL::Comments->search()->delete;
     }
 
     my $sth       = C4::Context->dbh;
@@ -148,7 +148,7 @@ sub create {
         # }
 
         # Create fake ILL request
-        my $new_obj = Koha::Illrequest->new($args)->store();
+        my $new_obj = Koha::ILL::Request->new($args)->store();
         my $new_id  = $new_obj->illrequest_id;
 
         # Create related illrequestattributes
@@ -161,7 +161,7 @@ sub create {
             }
 
             if ( rand >= 0.5 ) {
-                Koha::Illrequestattribute->new(
+                Koha::ILL::Request::Attribute->new(
                     {
                         illrequest_id => $new_id,
                         type          => $attribute->{type},
@@ -176,7 +176,9 @@ sub create {
     }
 
     # Create related illcomments
-    my @requests = Koha::Illrequests->search( { illrequest_id => { '!=', undef } } )->get_column('illrequest_id');
+    my @requests =
+      Koha::ILL::Requests->search( { illrequest_id => { '!=', undef } } )
+      ->get_column('illrequest_id');
     for ( my $i = 0 ; $i < $this_many ; $i++ ) {
         my $random_ill_request_id =
             $requests[ int( rand( scalar @requests ) ) ];
@@ -184,7 +186,7 @@ sub create {
             $borrowers[ int( rand( scalar @borrowers ) ) ];
 
         if ( rand >= 0.5 ) {
-            Koha::Illcomment->new(
+            Koha::ILL::Comment->new(
                 {
                     illrequest_id  => $random_ill_request_id,
                     borrowernumber => $random_borrowernumber,
@@ -253,8 +255,7 @@ sub backends {
     my @backends_array = ();
 
     # Get backend_dir
-    my $backend_dir = Koha::Illrequest->new->_config->backend_dir;
-
+    my $backend_dir = Koha::ILL::Request->new->_config->backend_dir;
     # Iterate on installed backends
     opendir( my $DIR, $backend_dir );
     while ( my $entry = readdir $DIR ) {
@@ -262,7 +263,7 @@ sub backends {
         next if $entry eq '.' or $entry eq '..';
 
         #Load the backend
-        my $backend_obj = Koha::Illrequest->new->load_backend($entry);
+        my $backend_obj = Koha::ILL::Request->new->load_backend($entry);
 
         #Get the status_graph_reunion
         my $status_graph = $backend_obj->capabilities;
